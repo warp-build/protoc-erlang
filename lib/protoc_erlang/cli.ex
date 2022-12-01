@@ -37,7 +37,7 @@ defmodule ProtocErlang.CLI do
 
     files =
       Enum.flat_map(request.file_to_generate, fn file ->
-        ProtocErlang.Generator.generate(desc)
+        ProtocErlang.Generator.generate(file)
       end)
 
     Google.Protobuf.Compiler.CodeGeneratorResponse.new(
@@ -50,6 +50,10 @@ defmodule ProtocErlang.CLI do
 
   def main(_args) do
     raise "invalid arguments. See protoc-gen-erlang --help."
+  end
+
+  def supported_features() do
+    Google.Protobuf.Compiler.CodeGeneratorResponse.Feature.value(:FEATURE_PROTO3_OPTIONAL)
   end
 
   if Version.match?(System.version(), "~> 1.13") do
@@ -69,4 +73,3 @@ defmodule ProtocErlang.CLI do
     end
   end
 end
-

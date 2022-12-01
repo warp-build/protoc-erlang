@@ -1,0 +1,12 @@
+syntax = "proto2";
+
+package ext;
+
+// -I src is needed, see Makefile
+import "erlangpb.proto";
+
+option (erlangpb.file).module_prefix = "Protobuf.Protoc.ExtTest";
+
+message Foo {
+  optional string a = 1;
+}
