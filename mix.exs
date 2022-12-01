@@ -27,7 +27,8 @@ defmodule ProtocErlang.MixProject do
   defp deps do
     [
       {:gpb, "~> 4.19.6"},
-      {:protobuf, "~> 0.11"}
+      {:protobuf, "~> 0.11"},
+      {:bbmustache, "~> 1.12"},
     ]
   end
 end
