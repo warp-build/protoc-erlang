@@ -5,16 +5,26 @@ defmodule ProtocErlang.Generator do
           [Google.Protobuf.Compiler.CodeGeneratorResponse.File.t()]
   def generate(file) do
     # NOTE(@ostera): make sure everything input into gpb is charlists and not binary strings
-    with :ok <- :gpb_compile.file(:binary.bin_to_list(file), opts()) do
-      for gen_file <- Path.wildcard("./**_pb.erl") do
-        content = File.read!(gen_file)
-        File.rm!(gen_file)
-        Google.Protobuf.Compiler.CodeGeneratorResponse.File.new(
-          name: gen_file,
-          content: content
-        )
+    defs =
+      with :ok <- :gpb_compile.file(:binary.bin_to_list(file), opts()) do
+        for gen_file <- Path.wildcard("./**_pb.erl") do
+          content = File.read!(gen_file)
+          File.rm!(gen_file)
+
+          Google.Protobuf.Compiler.CodeGeneratorResponse.File.new(
+            name: gen_file,
+            content: content
+          )
+        end
       end
-    end
+
+    services = [
+      # read bhvr template
+      # read client template
+      # use metadata from the already generated .erl files to template the above
+    ]
+
+    defs ++ services
   end
 
   defp opts() do
@@ -25,7 +35,7 @@ defmodule ProtocErlang.Generator do
       :maps,
       :strings_as_binaries,
       {:i, '.'},
-      {:report_errors, true},
+      {:report_errors, false},
       {:o, '.'},
       {:module_name_suffix, '_pb'},
       {:ignore_wellknown_types_directory, true}
